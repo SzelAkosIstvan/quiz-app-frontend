@@ -17,7 +17,7 @@ const decodeJwt = (token: string) => {
         const payload = JSON.parse(atob(base64)); // Base64 dekódolás és JSON parse
         return payload;
     } catch (error) {
-        console.error("Érvénytelen token:", error);
+        console.error("Invalid token:", error);
         return null;
     }
 };
