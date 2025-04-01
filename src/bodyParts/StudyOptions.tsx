@@ -1,0 +1,42 @@
+import React, {useEffect} from "react";
+import '../styleSheets/questionStyle.css'
+import Bubble from "./Bubble";
+import {getUserImage} from "../styleSheets/userData";
+
+
+const searchStyle = (styleInitial: string): string => {
+    if(styleInitial === 'p') {
+        return 'personas';
+    } else if(styleInitial === 'a') {
+        return 'adventurer-neutral';
+    } else if(styleInitial === 'm') {
+        return 'micah';
+    } else {
+        return 'open-peeps';
+    }
+};
+
+const StudyOptions = () => {
+    const [seed, setSeed] = React.useState("");
+    const [style, setStyle] = React.useState("personas");
+
+    useEffect(() => {
+        const imageVal = getUserImage();
+        if (imageVal) {
+            const userImage = imageVal.split('.')[0];
+            const userStyle = searchStyle(imageVal.split('.')[1]);
+            setSeed(userImage);
+            setStyle(userStyle);
+        }
+    }, []);
+
+    return (
+        <div className="study-opt">
+            <Bubble background={"#E4E4E4"} content={null} linkTo={"game"} text={"Join quiz, gl :D"} />
+            <Bubble background={"#71347A"} content={null} linkTo={"learn"} text={"Train your knowledge"} />
+            <Bubble background={"#E4E4E4"} content={`https://api.dicebear.com/9.x/${style}/svg?seed=${seed}`} linkTo={"avatar"} text={null} />
+        </div>
+    );
+}
+
+export default StudyOptions;
