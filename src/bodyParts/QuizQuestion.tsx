@@ -8,6 +8,7 @@ import TimeRemaining from "./TimeRemaining";
 type quizQuestionProps = {
     questionString: string;
     possibleAnswers: string[];
+    imageUrl?: string | null;
 }
 
 let result = 'a';
@@ -19,24 +20,25 @@ const handleOptionSelect = (option: string) => {
     }
 };
 
-const quizQuestion = ({questionString, possibleAnswers}: quizQuestionProps) => {
+const QuizQuestion = ({questionString, possibleAnswers, imageUrl}: quizQuestionProps) => {
     return (
         <>
             <HeaderW />
-            <Question question={questionString} visualUrl={"https://i0.wp.com/i0.kym-cdn.com/photos/images/original/000/495/314/e2b.png?w=640"} />
+            <Question question={questionString} visualUrl={imageUrl} />
             {possibleAnswers.length > 1 && (
                 <>
                     <MultipleChoice possibleAnswers={possibleAnswers} onSelect={handleOptionSelect} selectedOption={null} correctOption={null}/>
+                    <TimeRemaining/>
                 </>
             )}
-            {possibleAnswers.length === 0 && (
+            {possibleAnswers.length === 1 && (
                 <>
                     <GuessTheAnswer />
+                    <TimeRemaining/>
                 </>
             )}
-            <TimeRemaining/>
         </>
     );
 };
 
-export default quizQuestion;
+export default QuizQuestion;

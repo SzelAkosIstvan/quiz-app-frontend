@@ -18,6 +18,7 @@ const ControlQuiz = ({QuizName, teacherId}: ControlQuizProps) => {
     const [quizCode, setQuizCode] = useState<string>("");
     const [answers, setAnswers] = useState<string[]>([]);
     const stompClientRef = useRef<Client | null>(null);
+    let keydownCount = 0;
 
     const startQuiz = () => {
         const socket = new SockJS('http://localhost:8080/quiz-websocket');
@@ -44,12 +45,12 @@ const ControlQuiz = ({QuizName, teacherId}: ControlQuizProps) => {
     };
 
     const sendNextQuestion = () => {
-        console.log("Sending Quiz");
+        console.log("activating quiz");
         if (stompClientRef.current) {
             console.log("stomp client exists");
             stompClientRef.current.publish({
                 destination: '/app/next-question',
-                body: JSON.stringify({ quizCode: quizCode })
+                body: quizCode
             });
             console.log("Question sent");
         }
@@ -59,11 +60,18 @@ const ControlQuiz = ({QuizName, teacherId}: ControlQuizProps) => {
         const client = startQuiz();
 
         const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.code === "Space") {
+            if(keydownCount===0) {
                 setShowQuestion(true);
                 setQuestionORStats(prev => !prev);
                 sendNextQuestion();
             }
+            if (keydownCount>0 && e.code === "Space") {
+                setQuestionORStats(prev => !prev);
+            }
+            if (keydownCount>0 && e.code === "Enter") {
+                sendNextQuestion();
+            }
+            keydownCount++;
         };
 
         window.addEventListener("keydown", handleKeyDown);
@@ -82,14 +90,16 @@ const ControlQuiz = ({QuizName, teacherId}: ControlQuizProps) => {
             {!showQuestion ? (
                 <ShowCode QuizTitle={QuizName} QuizCode={quizCode}/>
             ) : (
-                questionORStats ? (
-                    <div className="cQiz">
-                        <Question question={"Teszt kerdes a tanar szemszogebol marha hosszan nagyban halomalo shiu biu hehahhe"} visualUrl={"https://static01.nyt.com/images/2021/04/30/multimedia/30xp-meme/29xp-meme-videoSixteenByNineJumbo1600-v6.jpg"}/>
-                        <TimeRemaining />
-                    </div>
-                ) : (
-                    <Statistics />
-                )
+                <>
+                    {questionORStats ? (
+                        <div className="cQiz">
+                            <Question question={"Teszt kerdes a tanar szemszogebol marha hosszan nagyban halomalo shiu biu hehahhe"} visualUrl={"https://static01.nyt.com/images/2021/04/30/multimedia/30xp-meme/29xp-meme-videoSixteenByNineJumbo1600-v6.jpg"}/>
+                        </div>
+                    ) : (
+                        <Statistics />
+                    )}
+                    <TimeRemaining />
+                </>
             )}
         </>
     );

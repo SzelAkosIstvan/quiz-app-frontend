@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Header from "../bodyParts/Header";
 import JoinQuiz from "../bodyParts/JoinQuiz";
 import StartQuiz from "../styleSheets/StartQuiz";
@@ -6,7 +6,7 @@ import PlayQuizGame from "./PlayQuizGame";
 
 const StudentQuizComponent: React.FC = () => {
     const [quizCode, setQuizCode] = useState<string[]>(Array(8).fill(""));
-    const { stompClient, message, question, start } = StartQuiz(quizCode);
+    const { stompClient, message, question, possibleAnswers, imageLinks, start } = StartQuiz(quizCode);
 
     const submitAnswer = (answer: string) => {
         if (stompClient) {
@@ -14,6 +14,15 @@ const StudentQuizComponent: React.FC = () => {
             stompClient.publish({ destination: `/app/submit-answer`, body: JSON.stringify({ fullQuizCode, answer }) });
         }
     };
+
+    useEffect(() => {
+        return () => {
+            // Clean up WebSocket connection when component unmounts
+            if (stompClient) {
+                stompClient.deactivate();
+            }
+        };
+    }, [stompClient]);
 
     return (
         <>
@@ -35,7 +44,13 @@ const StudentQuizComponent: React.FC = () => {
                 {/*<button onClick={() => submitAnswer("A válaszom")}>Válasz küldése</button>*/}
             </>
         ) : (
-            <PlayQuizGame question={question} answers={null} correctAnswer={null} />
+            <PlayQuizGame
+                key={question ? question.id : 'waiting'}
+                question={question}
+                answers={possibleAnswers}
+                correctAnswer={null}
+                imageUrl={imageLinks}
+            />
         ) }
         </>
     );

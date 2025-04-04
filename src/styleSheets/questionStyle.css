@@ -503,8 +503,7 @@ input[type="new-question-answer"]:focus {
 
 .join-code h1, .join-code h4 {
     text-align: left;
-    margin-left: max(8%, 18%);
-    width: 100%;
+    width: 85%;
     display: flex;
 }
 
