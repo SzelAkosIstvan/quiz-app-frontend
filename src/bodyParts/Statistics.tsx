@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
-import axios from 'axios';
 
-async function generateChart(): Promise<string> {
+async function generateChart(question: String): Promise<string> {
     const chartConfig = {
         type: 'bar',
         data: {
@@ -23,29 +22,23 @@ async function generateChart(): Promise<string> {
         options: {
             title: {
                 display: true,
-                text: 'Question has to be shown here',
+                text: question,
             }
         }
     };
 
-    const chartUrl = `https://quickchart.io/chart?c=${encodeURIComponent(JSON.stringify(chartConfig))}`;
-
-    try {
-        const response = await axios.get(chartUrl, { responseType: 'arraybuffer' });
-        const imageBlob = new Blob([response.data], { type: 'image/png' });
-        const imageUrl = URL.createObjectURL(imageBlob);
-        return imageUrl;
-    } catch (error) {
-        console.error('Error generating chart:', error);
-        throw error;
-    }
+    return `https://quickchart.io/chart?c=${encodeURIComponent(JSON.stringify(chartConfig))}`;
 }
 
-const Statistics = () => {
+type QuestionProps = {
+    question: String;
+}
+
+const Statistics = ({question}: QuestionProps) => {
     const [chartImage, setChartImage] = useState<string | null>(null);
 
     useEffect(() => {
-        generateChart().then(imageUrl => {
+        generateChart(question).then(imageUrl => {
             setChartImage(imageUrl);
         });
     }, []);

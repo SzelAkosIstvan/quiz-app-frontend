@@ -9,6 +9,8 @@ const StartQuiz = (quizCode: string[]) => {
     const [possibleAnswers, setPossibleAnswers] = useState<string[]>([]);
     const [imageLinks, setImageLinks] = useState<string | null>(null);
     const fullQuizCode = quizCode.join("");
+    const [selected, setSelected] = useState<boolean>(false);
+    const [correctAnswer, setCorrectAnswer] = useState<string | null>(null);
 
     const start = () => {
         const socket = new SockJS('http://localhost:8080/quiz-websocket');
@@ -24,7 +26,16 @@ const StartQuiz = (quizCode: string[]) => {
                     setQuestion(questionData.questionText);
                     setPossibleAnswers(questionData.possibleAnswers);
                     setImageLinks(questionData.imageLink);
+                    //reset selection
+                    setSelected(false);
+                    console.log("jeloles reset");
+                    setCorrectAnswer(null);
                 });
+
+                client.subscribe(`/topic/quiz/${fullQuizCode}/answers`, (message) => {
+                    console.log("helyes valasz", message.body);
+                    setCorrectAnswer(message.body);
+                })
 
                 // Hibák kezelése
                 client.subscribe(`/topic/quiz/${fullQuizCode}/error`, (message) => {
@@ -44,7 +55,7 @@ const StartQuiz = (quizCode: string[]) => {
         return client;
     };
 
-    return { stompClient, message, question, possibleAnswers, imageLinks, start };
+    return { stompClient, message, question, correctAnswer, possibleAnswers, imageLinks, selected, setSelected, start };
 };
 
 export default StartQuiz;

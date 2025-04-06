@@ -19,6 +19,8 @@ const ControlQuiz = ({QuizName, teacherId}: ControlQuizProps) => {
     const [answers, setAnswers] = useState<string[]>([]);
     const stompClientRef = useRef<Client | null>(null);
     let keydownCount = 0;
+    const [question, setQuestion] = useState<string>("");
+    const [imageUrl, setImageUrl] = useState("");
 
     const startQuiz = () => {
         const socket = new SockJS('http://localhost:8080/quiz-websocket');
@@ -30,12 +32,20 @@ const ControlQuiz = ({QuizName, teacherId}: ControlQuizProps) => {
                 client.publish({ destination: `/app/start-quiz`, body: JSON.stringify({ quizId: "1", teacherId }) });
 
                 client.subscribe(`/topic/teacher/${teacherId}/answers`, (message) => {
+                    console.log("Recieved answer submission:", message.body);
                     setAnswers((prevAnswers) => [...prevAnswers, message.body]);
                 });
 
                 client.subscribe(`/topic/teacher/${teacherId}/quiz-code`, (message) => {
                     setQuizCode(message.body);
                     localStorage.setItem('quizCode', JSON.stringify(message.body));
+                });
+
+                client.subscribe(`/topic/quiz/${quizCode}/question`, (message) => {
+                    // setQuestion(message.body);
+                    const questionData = JSON.parse(message.body);
+                    setQuestion(questionData.questionText);
+                    setImageUrl(questionData.imageLink);
                 });
             },
         });
@@ -56,6 +66,16 @@ const ControlQuiz = ({QuizName, teacherId}: ControlQuizProps) => {
         }
     };
 
+    const showCurrentCorrect = () => {
+        console.log("showCurrentCorrect");
+        if (stompClientRef.current) {
+            stompClientRef.current.publish({
+                destination: `/app/current-correct`,
+                body: quizCode
+            });
+        }
+    };
+
     useEffect(() => {
         const client = startQuiz();
 
@@ -70,6 +90,9 @@ const ControlQuiz = ({QuizName, teacherId}: ControlQuizProps) => {
             }
             if (keydownCount>0 && e.code === "Enter") {
                 sendNextQuestion();
+            }
+            if (keydownCount>0 && e.code === "KeyV") {
+                showCurrentCorrect();
             }
             keydownCount++;
         };
@@ -93,12 +116,14 @@ const ControlQuiz = ({QuizName, teacherId}: ControlQuizProps) => {
                 <>
                     {questionORStats ? (
                         <div className="cQiz">
-                            <Question question={"Teszt kerdes a tanar szemszogebol marha hosszan nagyban halomalo shiu biu hehahhe"} visualUrl={"https://static01.nyt.com/images/2021/04/30/multimedia/30xp-meme/29xp-meme-videoSixteenByNineJumbo1600-v6.jpg"}/>
+                            <Question question={question} visualUrl={imageUrl}/>
                         </div>
                     ) : (
-                        <Statistics />
+                        <Statistics question={question}/>
                     )}
-                    <TimeRemaining />
+                    <TimeRemaining
+                        key={question}
+                    />
                 </>
             )}
         </>

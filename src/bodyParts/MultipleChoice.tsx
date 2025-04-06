@@ -6,10 +6,11 @@ interface MultipleChoiceProps {
     possibleAnswers: string[];
     onSelect: (selectedOption: string) => void;
     selectedOption: string | null;
-    correctOption: string | null;
+    correctOption?: string | null;
+    selected?: boolean;
 }
 
-const MultipleChoice: React.FC<MultipleChoiceProps> = ({possibleAnswers, onSelect, selectedOption, correctOption}: MultipleChoiceProps) => {
+const MultipleChoice: React.FC<MultipleChoiceProps> = ({possibleAnswers, onSelect, selectedOption, correctOption, selected}: MultipleChoiceProps) => {
 
     return (
         <div className="multiple-choice">
@@ -18,8 +19,9 @@ const MultipleChoice: React.FC<MultipleChoiceProps> = ({possibleAnswers, onSelec
                     key={index}
                     answer={answer}
                     onClick={() => onSelect(answer)}
-                    isSelected={selectedOption === answer}
-                    isCorrect={answer[0] === correctOption}
+                    isSelected={selectedOption === answer}//logic???
+                    isCorrect={correctOption === null ? null : answer === correctOption}
+                    clicked={selected}
                 />
             ))}
         </div>

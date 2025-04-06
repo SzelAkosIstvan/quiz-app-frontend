@@ -7,9 +7,11 @@ type playQuizProps = {
     answers: string[];
     correctAnswer: string | null;
     imageUrl: string | null;
+    handleOptionSelect: (option: string) => void;
+    selected?: boolean;
 }
 
-const PlayQuizGame = ({question, answers, correctAnswer, imageUrl}: playQuizProps) => {
+const PlayQuizGame = ({question, answers, correctAnswer, imageUrl, handleOptionSelect, selected}: playQuizProps) => {
     return (
         <>
             { !question ? (
@@ -19,6 +21,9 @@ const PlayQuizGame = ({question, answers, correctAnswer, imageUrl}: playQuizProp
                     questionString={question}
                     possibleAnswers={answers}
                     imageUrl={imageUrl}
+                    handleOptionSelect={handleOptionSelect}
+                    selected={selected}
+                    correctAnswer={correctAnswer === null ? null : correctAnswer}
                 />
             )}
         </>

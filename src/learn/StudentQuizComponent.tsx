@@ -6,18 +6,18 @@ import PlayQuizGame from "./PlayQuizGame";
 
 const StudentQuizComponent: React.FC = () => {
     const [quizCode, setQuizCode] = useState<string[]>(Array(8).fill(""));
-    const { stompClient, message, question, possibleAnswers, imageLinks, start } = StartQuiz(quizCode);
+    const { stompClient, message, question, correctAnswer, possibleAnswers, imageLinks, selected, setSelected, start } = StartQuiz(quizCode);
 
     const submitAnswer = (answer: string) => {
         if (stompClient) {
             const fullQuizCode = quizCode.join("");
             stompClient.publish({ destination: `/app/submit-answer`, body: JSON.stringify({ fullQuizCode, answer }) });
+            setSelected(true);
         }
     };
 
     useEffect(() => {
         return () => {
-            // Clean up WebSocket connection when component unmounts
             if (stompClient) {
                 stompClient.deactivate();
             }
@@ -48,8 +48,10 @@ const StudentQuizComponent: React.FC = () => {
                 key={question ? question.id : 'waiting'}
                 question={question}
                 answers={possibleAnswers}
-                correctAnswer={null}
+                correctAnswer={correctAnswer === null ? null : correctAnswer}
                 imageUrl={imageLinks}
+                handleOptionSelect={submitAnswer}
+                selected={selected}
             />
         ) }
         </>
