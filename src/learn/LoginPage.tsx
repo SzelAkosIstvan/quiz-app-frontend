@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styleSheets/kinezet.css';
 import {handleLogin} from '../styleSheets/userData';
-import Header from "../bodyParts/Header";
 
 interface LoginPageProps {
     setIsAuthenticated: (isAuthenticated: boolean) => void;
@@ -32,7 +31,8 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsAuthenticated , setIsTeacher
     };
 
     return (
-        <div className="background">
+        <>
+        <div className="background"/>
             <div className="header" id={isInputFocused ? "header-active" : undefined}>
                 <img alt="VDU logo" />
             </div>
@@ -50,7 +50,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsAuthenticated , setIsTeacher
                     />
                 </form>
             </div>
-        </div>
+        </>
     );
 };
 

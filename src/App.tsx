@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {BrowserRouter as Router, Route, Routes, Navigate, useNavigate, useLocation} from 'react-router-dom';
+import {Route, Routes, Navigate, useNavigate, useLocation} from 'react-router-dom';
 import './App.css';
 import {getCookie ,decodeJwt} from "./styleSheets/userData";
 import StudentQuizComponent from "./learn/StudentQuizComponent";
@@ -20,10 +20,6 @@ function App() {
     const [quizName, setQuizName] = useState<string>('Internet Technology Lecture #3');
     const navigate = useNavigate();
     const location = useLocation();
-
-    const authCheck = () => {
-        return true;
-    }
 
     useEffect(() => {//on loading, it detects if user is logged in or not and sends to '/'
         const token = getCookie('token');//localStorage.getItem("token");
@@ -109,12 +105,8 @@ function App() {
                 <Route
                     path="/quiz_lab"
                     element={
-                        isAuthenticated? (
-                            isTeacher ? (
+                        isTeacher? (
                                 <CreateNewQuiz />
-                            ) : (
-                                <Navigate to="/login" replace />
-                            )
                         ) : (
                             <Navigate to="/login" replace />
                         )}
