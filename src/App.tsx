@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {BrowserRouter as Router, Route, Routes, Navigate, useNavigate} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Routes, Navigate, useNavigate, useLocation} from 'react-router-dom';
 import './App.css';
+import {getCookie ,decodeJwt} from "./styleSheets/userData";
 import StudentQuizComponent from "./learn/StudentQuizComponent";
 import TeacherQuizComponent from "./learn/TeacherQuizComponent";
 import LoginPage from './learn/LoginPage';
@@ -10,33 +11,28 @@ import CreateNewQuiz from "./learn/CreateNewQuiz";
 import StudentMain from "./learn/StudentMain";
 import ControlQuiz from "./learn/ControlQuiz";
 
-const decodeJwt = (token: string) => {
-    try {
-        const base64Url = token.split('.')[1]; // A payload rész kinyerése
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/'); // Base64 URL-safe karakterek cseréje
-        const payload = JSON.parse(atob(base64)); // Base64 dekódolás és JSON parse
-        return payload;
-    } catch (error) {
-        console.error("Invalid token:", error);
-        return null;
-    }
-};
 
 function App() {
+    const [id, setId] = useState('');
     const [isAuthenticated, setIsAuthenticated] = React.useState(false);
     const [isTeacher, setIsTeacher] = React.useState(false);
-    const [teacherId, setTeacherId] = useState<string>('IF8994252');
+    const [teacherId, setTeacherId] = useState<string>('');
     const [quizName, setQuizName] = useState<string>('Internet Technology Lecture #3');
+    const navigate = useNavigate();
+    const location = useLocation();
 
     const authCheck = () => {
         return true;
     }
 
     useEffect(() => {//on loading, it detects if user is logged in or not and sends to '/'
-        const token = localStorage.getItem("token");
+        const token = getCookie('token');//localStorage.getItem("token");
+        console.log(token);
         if (token) {
             const decoded = decodeJwt(token);
+            console.log(decoded);
             if(decoded) {
+                setId(decoded.id);
                 setIsTeacher(decoded.teacherRole);
                 // console.log(decoded.id);
                 // console.log(decoded.username);
@@ -46,19 +42,20 @@ function App() {
         }
     }, []);
 
-  return (
+    useEffect(() => {
+        if (isAuthenticated) {
+            if(location.pathname==='/login')
+                navigate('/');
+            else
+                navigate(location.pathname, { replace: true });
+        } else {
+            navigate('/login');
+        }
+    }, [isAuthenticated, isTeacher, navigate]);
+
+    return (
     <div className="App">
-        <Router>
             <Routes>
-                <Route path="/game" element={<StudentQuizComponent />} />
-                <Route path="/studMain" element={<StudentMain/>} />
-                <Route path="/teacherMain" element={<TeacherQuizComponent sendTeacherId={setTeacherId} setQuizName={setQuizName}/>} />
-                {/*<Route path="/playQuiz" element={<PlayQuizGame />} />*/}
-                <Route path="/controlQuiz" element={<ControlQuiz QuizName={quizName} teacherId={teacherId}/>} />
-                <Route path="/student" element={<StudentMain />} />
-                <Route path="/learn" element={<LearnFromGPT />} />
-                <Route path="/avatar" element={<AvatarSetup />} />
-                <Route path="/quiz_lab" element={<CreateNewQuiz />} />
                 <Route path="/login" element={<LoginPage setIsAuthenticated={setIsAuthenticated} setIsTeacher={setIsTeacher} />}/>
                 <Route
                     path="/"
@@ -78,9 +75,52 @@ function App() {
                         )
                     }
                 />
+                <Route
+                    path="/quiz"
+                    element={
+                        isAuthenticated? (
+                            isTeacher? (
+                                <ControlQuiz QuizName={quizName} teacherId={teacherId}/>
+                            ) : (
+                                <StudentQuizComponent />
+                            )
+                        ):(
+                            <Navigate to="/login" replace />
+                        )}
+                />
+                <Route
+                    path="/learn"
+                    element={
+                        isAuthenticated? (
+                            <LearnFromGPT />
+                        ) : (
+                            <Navigate to="/login" replace />
+                        )}
+                />
+                <Route
+                    path="/avatar"
+                    element={
+                        isAuthenticated? (
+                            <AvatarSetup />
+                        ) : (
+                            <Navigate to="/login" replace />
+                        )}
+                />
+                <Route
+                    path="/quiz_lab"
+                    element={
+                        isAuthenticated? (
+                            isTeacher ? (
+                                <CreateNewQuiz />
+                            ) : (
+                                <Navigate to="/login" replace />
+                            )
+                        ) : (
+                            <Navigate to="/login" replace />
+                        )}
+                />
                 <Route path="*" element={<Navigate to="/login" replace />} />
             </Routes>
-        </Router>
     </div>
   );
 }

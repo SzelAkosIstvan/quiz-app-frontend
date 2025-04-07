@@ -32,7 +32,7 @@ const StudyOptions = () => {
 
     return (
         <div className="study-opt">
-            <Bubble background={"#E4E4E4"} content={null} linkTo={"game"} text={"Join quiz, gl :D"} />
+            <Bubble background={"#E4E4E4"} content={null} linkTo={"quiz"} text={"Join quiz, gl :D"} />
             <Bubble background={"#71347A"} content={null} linkTo={"learn"} text={"Train your knowledge"} />
             <Bubble background={"#E4E4E4"} content={`https://api.dicebear.com/9.x/${style}/svg?seed=${seed}`} linkTo={"avatar"} text={null} />
         </div>

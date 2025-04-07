@@ -17,7 +17,7 @@ const TeacherQuizComponent: React.FC<TeacherQuizComponentProps> = ({sendTeacherI
 
     const startQuiz = () => {
         setTeacherId(teacherId);
-        navigate('/controlQuiz');
+        navigate('/quiz');
     };
 
     const newQuiz = () => {
