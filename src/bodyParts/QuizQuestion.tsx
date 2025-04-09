@@ -8,35 +8,36 @@ import TimeRemaining from "./TimeRemaining";
 type quizQuestionProps = {
     questionString: string;
     possibleAnswers: string[];
+    imageUrl?: string | null;
+    handleOptionSelect: (option: string) => void;
+    selected?: boolean;
+    correctAnswer?: string | null;
 }
 
-let result = 'a';
-
-const handleOptionSelect = (option: string) => {
-    if(option.length>0 && option[0] === result)
-    {
-        console.log("Gratulálok te bolond");
-    }
-};
-
-const quizQuestion = ({questionString, possibleAnswers}: quizQuestionProps) => {
+const QuizQuestion = ({questionString, possibleAnswers, imageUrl, handleOptionSelect, selected, correctAnswer}: quizQuestionProps) => {
     return (
         <>
             <HeaderW />
-            <Question question={questionString} visualUrl={"https://i0.wp.com/i0.kym-cdn.com/photos/images/original/000/495/314/e2b.png?w=640"} />
+            <Question question={questionString} visualUrl={imageUrl} />
             {possibleAnswers.length > 1 && (
                 <>
-                    <MultipleChoice possibleAnswers={possibleAnswers} onSelect={handleOptionSelect} selectedOption={null} correctOption={null}/>
+                    <MultipleChoice
+                        possibleAnswers={possibleAnswers}
+                        onSelect={handleOptionSelect}
+                        selectedOption={null}
+                        correctOption={correctAnswer === null ? null : correctAnswer}
+                        selected={selected} />
+                    <TimeRemaining/>
                 </>
             )}
-            {possibleAnswers.length === 0 && (
+            {possibleAnswers.length === 1 && (
                 <>
                     <GuessTheAnswer />
+                    <TimeRemaining/>
                 </>
             )}
-            <TimeRemaining/>
         </>
     );
 };
 
-export default quizQuestion;
+export default QuizQuestion;

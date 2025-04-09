@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Header from "../bodyParts/Header";
 import JoinQuiz from "../bodyParts/JoinQuiz";
 import StartQuiz from "../styleSheets/StartQuiz";
@@ -6,14 +6,23 @@ import PlayQuizGame from "./PlayQuizGame";
 
 const StudentQuizComponent: React.FC = () => {
     const [quizCode, setQuizCode] = useState<string[]>(Array(8).fill(""));
-    const { stompClient, message, question, start } = StartQuiz(quizCode);
+    const { stompClient, message, question, correctAnswer, possibleAnswers, imageLinks, selected, setSelected, start } = StartQuiz(quizCode);
 
     const submitAnswer = (answer: string) => {
         if (stompClient) {
             const fullQuizCode = quizCode.join("");
             stompClient.publish({ destination: `/app/submit-answer`, body: JSON.stringify({ fullQuizCode, answer }) });
+            setSelected(true);
         }
     };
+
+    useEffect(() => {
+        return () => {
+            if (stompClient) {
+                stompClient.deactivate();
+            }
+        };
+    }, [stompClient]);
 
     return (
         <>
@@ -35,7 +44,15 @@ const StudentQuizComponent: React.FC = () => {
                 {/*<button onClick={() => submitAnswer("A válaszom")}>Válasz küldése</button>*/}
             </>
         ) : (
-            <PlayQuizGame question={question} answers={null} correctAnswer={null} />
+            <PlayQuizGame
+                key={question ? question.id : 'waiting'}
+                question={question}
+                answers={possibleAnswers}
+                correctAnswer={correctAnswer === null ? null : correctAnswer}
+                imageUrl={imageLinks}
+                handleOptionSelect={submitAnswer}
+                selected={selected}
+            />
         ) }
         </>
     );

@@ -17,6 +17,7 @@ const LearnFromGPT: React.FC = () => {
         setSelectedOption(option);
         if (option[0] === result) {
             console.log("Congrats!!");
+            setResult(option);
         }
     };
 
@@ -45,9 +46,10 @@ const LearnFromGPT: React.FC = () => {
             console.log("Response:", data.message);
             const responseText = data.message;
 
-            const questionPart = responseText.match(/\*?Question: ([^?]*)\?/);//this part isn't correct in every run, it may need some future corrections
-            setQuestion(questionPart);
-            console.log("Question:", questionPart);
+            const questionPart = responseText.match(/(Question:|^)\s*(.*?\?)/);
+            const extractedQuestion = questionPart ? questionPart[2].trim() : "Could not parse question";
+            setQuestion(extractedQuestion);
+            console.log("Question:", extractedQuestion);
 
             const answerLines = responseText.split('\n').filter((line: string) => /^[a-d]\)/.test(line.trim()));
             setPossibleAnswers(answerLines);

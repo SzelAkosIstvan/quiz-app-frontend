@@ -1,23 +1,14 @@
 import React, { useState } from 'react';
-import SockJS from 'sockjs-client';
-import { Client } from '@stomp/stompjs';
 import '../styleSheets/quiz.css';
 import {useNavigate} from "react-router-dom";
 
-interface TeacherQuizComponentProps {
-    sendTeacherId: (code: string) => void;
-    setQuizName: (name: string) => void;
-}
-
-const TeacherQuizComponent: React.FC<TeacherQuizComponentProps> = ({sendTeacherId, setQuizName}:TeacherQuizComponentProps) => {
+const TeacherQuizComponent: React.FC = () => {
     const navigate = useNavigate();
     const [teacherId, setTeacherId] = useState<string>('IF8994252');
-    const [answers, setAnswers] = useState<string[]>([]);
-    const [stompClient, setStompClient] = useState<Client | null>(null);
 
     const startQuiz = () => {
         setTeacherId(teacherId);
-        navigate('/controlQuiz');
+        navigate('/quiz');
     };
 
     const newQuiz = () => {
