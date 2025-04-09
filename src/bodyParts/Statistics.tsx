@@ -41,7 +41,7 @@ const Statistics = ({question}: QuestionProps) => {
         generateChart(question).then(imageUrl => {
             setChartImage(imageUrl);
         });
-    }, []);
+    }, [question]);
 
     return (
         <div className="question-statistics">

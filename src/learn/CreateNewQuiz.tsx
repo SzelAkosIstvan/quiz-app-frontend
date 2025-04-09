@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
 import WorkHeader from "../bodyParts/WorkHeader";
 import NewQuizContent from "../bodyParts/NewQuizContent";
-import QuestionAddButtons from "../bodyParts/QuestionAddButtons";
 
 interface Question {
     type: string;
@@ -37,7 +36,7 @@ const CreateNewQuiz = () => {
             return [];
         }
     };
-    const [questions, setQuestions] = useState<Question[]>(getQuestionsFromStorage());
+    const [questions] = useState<Question[]>(getQuestionsFromStorage());
 
     useEffect(() => {
         localStorage.setItem('quizTitle', quizTitle);

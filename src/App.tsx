@@ -13,7 +13,7 @@ import ControlQuiz from "./learn/ControlQuiz";
 
 
 function App() {
-    const [id, setId] = useState('');
+    //const [id, setId] = useState('');
     const [isAuthenticated, setIsAuthenticated] = React.useState(false);
     const [isTeacher, setIsTeacher] = React.useState(false);
     const [teacherId, setTeacherId] = useState<string>('');
@@ -28,8 +28,11 @@ function App() {
             const decoded = decodeJwt(token);
             console.log(decoded);
             if(decoded) {
-                setId(decoded.id);
+                //setId(decoded.id);
                 setIsTeacher(decoded.teacherRole);
+                    setTeacherId(decoded.id);
+                    setQuizName('Internet Technology Lecture #3');//just to not have eslint warning at this moment
+
                 // console.log(decoded.id);
                 // console.log(decoded.username);
                 // console.log(decoded.teacherRole);
@@ -47,7 +50,7 @@ function App() {
         } else {
             navigate('/login');
         }
-    }, [isAuthenticated, isTeacher, navigate]);
+    }, [isAuthenticated, isTeacher, navigate, location.pathname]);
 
     return (
     <div className="App">
@@ -58,10 +61,7 @@ function App() {
                     element={
                         isAuthenticated ? (
                             isTeacher ? (
-                                <TeacherQuizComponent
-                                    sendTeacherId={setTeacherId}
-                                    setQuizName={setQuizName}
-                                />
+                                <TeacherQuizComponent/>
                             ) : (
                                 <StudentMain/>
                                 // <StudentQuizComponent />

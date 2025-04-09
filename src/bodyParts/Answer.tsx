@@ -23,6 +23,10 @@ const Answer: React.FC<AnswerProps> = ({answer, onClick, isSelected, isCorrect, 
         }
     }, [clicked]);
 
+    useEffect(() => {
+        setSlcted(false);
+    }, [answer]);
+
     return (
         <button className={`answer ${slcted ? "selected" : ""} ${slcted ? (isCorrect === null ? ("") : (isCorrect ? "correct" : "incorrect")) : ""}`}
                 onClick={click}

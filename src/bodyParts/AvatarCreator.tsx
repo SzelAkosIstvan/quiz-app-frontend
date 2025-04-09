@@ -1,6 +1,6 @@
-import React, {useState, useEffect, useRef} from "react";
+import React, {useEffect, useRef} from "react";
 import '../styleSheets/questionStyle.css'
-import {getUserData, getUserImage, setNewUserImage} from "../styleSheets/userData";
+import {getUserImage, setNewUserImage} from "../styleSheets/userData";
 import {useNavigate} from "react-router-dom";
 
 // This part generates a 6 character string what will be the seed for the api request
@@ -80,7 +80,7 @@ const AvatarCreator: React.FC = () => {
     return (
         <div className="avatar-tools">
             <div className="avatar-wrapper">
-                <img className="avatar-image" src={`https://api.dicebear.com/9.x/${style}/svg?seed=${seed}`}/>{/* api in use with the variables */}
+                <img alt="" className="avatar-image" src={`https://api.dicebear.com/9.x/${style}/svg?seed=${seed}`}/>{/* api in use with the variables */}
                 <form>
                     <select onChange={handleChanges} value={style}>
                         <option value="personas">Personas</option>

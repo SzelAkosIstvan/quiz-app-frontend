@@ -1,6 +1,5 @@
-import React, {useState} from "react";
+import React from "react";
 import QuizCodeInput from "./quizCodeInput";
-import StartQuiz from "../styleSheets/StartQuiz";
 import '../styleSheets/questionStyle.css'
 
 interface JoinQuizProps {
