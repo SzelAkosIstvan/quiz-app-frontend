@@ -18,7 +18,8 @@ export const getCookie = (name:string)=> {
 
 export const handleLogin = async (id: string) => {
     try {
-        const response = await fetch('http://localhost:8080/login', {
+        console.log(`na: ${process.env.REACT_APP_API_URL}`)
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -75,7 +76,7 @@ export const setNewUserImage = async (newImage: string): Promise<void> => {
         }
         const id = decodeJwt(token).id;
         console.log(id);
-        const response = await fetch('http://localhost:8080/setAvatar', {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/setAvatar`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

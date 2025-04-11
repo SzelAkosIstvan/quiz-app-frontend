@@ -17,7 +17,7 @@ export const WebSocketProvider: React.FC<{children: React.ReactNode}> = ({ child
     const connectToWebSocket = (teacherId: string, onConnect?: () => void) => {
         if (stompClient && stompClient.connected) return;
 
-        const socket = new SockJS('http://localhost:8080/quiz-websocket');
+        const socket = new SockJS(`${process.env.REACT_APP_API_URL}/quiz-websocket`);
         const client = new Client({
             webSocketFactory: () => socket,
             onConnect: () => {

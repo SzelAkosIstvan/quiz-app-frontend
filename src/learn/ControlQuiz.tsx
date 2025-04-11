@@ -23,7 +23,7 @@ const ControlQuiz = ({QuizName, teacherId}: ControlQuizProps) => {
     const [imageUrl, setImageUrl] = useState("");
 
     const startQuiz = useCallback(() => {
-        const socket = new SockJS('http://localhost:8080/quiz-websocket');
+        const socket = new SockJS(`${process.env.REACT_APP_API_URL}/quiz-websocket`);
         const client = new Client({
             webSocketFactory: () => socket,
             onConnect: () => {
