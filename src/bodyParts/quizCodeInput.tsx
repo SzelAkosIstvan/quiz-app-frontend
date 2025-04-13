@@ -39,7 +39,9 @@ const QuizCodeInput: React.FC<QuizCodeInputProps> = ({ quizCode, setQuizCode }) 
                 <input
                     className="quiz-input"
                     key={index}
-                    type="text"
+                    type="tel"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
                     maxLength={1}
                     value={digit}
                     onChange={(e) => handleInputChange(index, e.target.value)}

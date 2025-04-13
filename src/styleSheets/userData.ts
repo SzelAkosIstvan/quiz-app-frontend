@@ -16,6 +16,18 @@ export const getCookie = (name:string)=> {
     }
 }
 
+export const searchStyle = (styleInitial: string): string => {
+    if(styleInitial === 'p') {
+        return 'personas';
+    } else if(styleInitial === 'a') {
+        return 'adventurer-neutral';
+    } else if(styleInitial === 'm') {
+        return 'micah';
+    } else {
+        return 'open-peeps';
+    }
+};
+
 export const handleLogin = async (id: string) => {
     try {
         console.log(`na: ${process.env.REACT_APP_API_URL}`)
@@ -67,6 +79,17 @@ export const decodeJwt = (token: string) => {
         return null;
     }
 };
+
+export const getUserName = ():string => {
+    const currentToken = getCookie('token');
+    if(currentToken) {
+        const decoded = decodeJwt(currentToken);
+        if (decoded) {
+            return decoded.username;
+        }
+    }
+    return "heh";
+}
 
 export const setNewUserImage = async (newImage: string): Promise<void> => {
     try {

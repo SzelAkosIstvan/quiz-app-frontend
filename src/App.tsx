@@ -10,6 +10,8 @@ import AvatarSetup from "./learn/AvatarSetup";
 import CreateNewQuiz from "./learn/CreateNewQuiz";
 import StudentMain from "./learn/StudentMain";
 import ControlQuiz from "./learn/ControlQuiz";
+import PersonalScore from "./learn/PersonalScore";
+import QuizTotal from "./learn/QuizTotal";
 
 
 function App() {
@@ -55,6 +57,7 @@ function App() {
     return (
     <div className="App">
             <Routes>
+                <Route path="/total" element={<QuizTotal/>}/>
                 <Route path="/login" element={<LoginPage setIsAuthenticated={setIsAuthenticated} setIsTeacher={setIsTeacher} />}/>
                 <Route
                     path="/"

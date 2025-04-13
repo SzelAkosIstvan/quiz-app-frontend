@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import '../styleSheets/quiz.css';
 import {useNavigate} from "react-router-dom";
+import BackButton from "../bodyParts/BackButton";
+import {faHouseLock} from "@fortawesome/free-solid-svg-icons";
 
 const TeacherQuizComponent: React.FC = () => {
     const navigate = useNavigate();
@@ -29,6 +31,7 @@ const TeacherQuizComponent: React.FC = () => {
                     <h2> Start Quiz</h2>
                 </div>
             </div>
+            <BackButton icon={faHouseLock} text={"Logout"}/>
 
             {/*<p>Kvíz kód: {quizCode}</p>*/}
             {/*<h2>Válaszok:</h2>

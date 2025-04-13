@@ -6,6 +6,7 @@ import Statistics from "../bodyParts/Statistics";
 import TimeRemaining from "../bodyParts/TimeRemaining";
 import SockJS from "sockjs-client";
 import {Client} from "@stomp/stompjs";
+import QuizTotal from "./QuizTotal";
 
 type ControlQuizProps = {
     QuizName: string;
@@ -21,6 +22,7 @@ const ControlQuiz = ({QuizName, teacherId}: ControlQuizProps) => {
     let keydownCount = useRef(0);
     const [question, setQuestion] = useState<string>("");
     const [imageUrl, setImageUrl] = useState("");
+    const [isEnded, setIsEnded] = useState(false);
 
     const startQuiz = useCallback(() => {
         const socket = new SockJS(`${process.env.REACT_APP_API_URL}/quiz-websocket`);
@@ -35,6 +37,10 @@ const ControlQuiz = ({QuizName, teacherId}: ControlQuizProps) => {
                     setQuizCode(message.body);
                     localStorage.setItem('quizCode', JSON.stringify(message.body));
                 });
+
+                client.subscribe(`/topic/quiz/${quizCode}/end`, (message) => {
+                    setIsEnded(true);
+                })
 
                 client.subscribe(`/topic/quiz/${quizCode}/question`, (message) => {
                     const questionData = JSON.parse(message.body);
@@ -104,17 +110,24 @@ const ControlQuiz = ({QuizName, teacherId}: ControlQuizProps) => {
                 <ShowCode QuizTitle={QuizName} QuizCode={quizCode}/>
             ) : (
                 <>
-                    {questionORStats ? (
-                        <div className="cQiz">
-                            <Question question={question} visualUrl={imageUrl}/>
-                        </div>
+                    { !isEnded ? (
+                        <>
+                            {questionORStats ? (
+                                <div className="cQiz">
+                                    <Question question={question} visualUrl={imageUrl}/>
+                                </div>
+                            ) : (
+                                <Statistics question={question}/>
+                            )}
+                            <TimeRemaining
+                                key={question}
+                            />
+                        </>
                     ) : (
-                        <Statistics question={question}/>
+                        <QuizTotal />
                     )}
-                    <TimeRemaining
-                        key={question}
-                    />
                 </>
+
             )}
         </>
     );

@@ -6,7 +6,7 @@ import PlayQuizGame from "./PlayQuizGame";
 
 const StudentQuizComponent: React.FC = () => {
     const [quizCode, setQuizCode] = useState<string[]>(Array(8).fill(""));
-    const { stompClient, message, question, correctAnswer, possibleAnswers, imageLinks, selected, setSelected, start } = StartQuiz(quizCode);
+    const { stompClient, message, question, correctAnswer, possibleAnswers, imageLinks, selected, isEnded, setSelected, start } = StartQuiz(quizCode);
 
     const submitAnswer = (answer: string) => {
         if (stompClient) {
@@ -52,6 +52,7 @@ const StudentQuizComponent: React.FC = () => {
                 imageUrl={imageLinks}
                 handleOptionSelect={submitAnswer}
                 selected={selected}
+                end={isEnded}
             />
         ) }
         </>

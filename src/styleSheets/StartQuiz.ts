@@ -11,6 +11,7 @@ const StartQuiz = (quizCode: string[]) => {
     const fullQuizCode = quizCode.join("");
     const [selected, setSelected] = useState<boolean>(false);
     const [correctAnswer, setCorrectAnswer] = useState<string | null>(null);
+    const [isEnded, setIsEnded] = useState<boolean>(false);
 
     const start = () => {
         const socket = new SockJS(`${process.env.REACT_APP_API_URL}/quiz-websocket`);
@@ -37,6 +38,11 @@ const StartQuiz = (quizCode: string[]) => {
                     setCorrectAnswer(message.body);
                 })
 
+                client.subscribe(`/topic/quiz/${fullQuizCode}/end`, (message) => {
+                    setQuestion(null);
+                    setIsEnded(true);
+                })
+
                 // Hibák kezelése
                 client.subscribe(`/topic/quiz/${fullQuizCode}/error`, (message) => {
                     setMessage(message.body);
@@ -55,7 +61,7 @@ const StartQuiz = (quizCode: string[]) => {
         return client;
     };
 
-    return { stompClient, message, question, correctAnswer, possibleAnswers, imageLinks, selected, setSelected, start };
+    return { stompClient, message, question, correctAnswer, possibleAnswers, imageLinks, selected, isEnded, setSelected, start };
 };
 
 export default StartQuiz;
