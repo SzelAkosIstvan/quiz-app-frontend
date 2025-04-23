@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import WorkHeader from "../bodyParts/WorkHeader";
 import NewQuizContent from "../bodyParts/NewQuizContent";
+import {useNavigate} from "react-router-dom";
 
 interface Question {
     type: string;
@@ -15,6 +16,7 @@ interface QuizData {
 }
 
 const CreateNewQuiz = () => {
+    const navigate = useNavigate();
     const [quizTitle, setQuizTitle] = useState(() => {
         const savedTitle = localStorage.getItem('quizTitle');
         return savedTitle || "Quiz title";
@@ -71,6 +73,10 @@ const CreateNewQuiz = () => {
                 const result = await response.json();//ez es a kovi sor nem kell
                 console.log('Quiz saved successfully:', result);
             }
+
+            localStorage.removeItem('quizTitle');
+            localStorage.removeItem('questions');
+            navigate('/');
 
         } catch (e) {
             console.error(e);

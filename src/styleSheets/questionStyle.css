@@ -550,10 +550,22 @@ input[type="new-question-answer"]:focus {
     max-width: 100%;
 }
 
+.image-upload.with-image:hover {
+        border-color: #ff0000;
+        background-color: #fff0f0;
+}
+
 .asd {
-    width: 94%;
+    width: 95%;
     display: flex;
     justify-content: space-between;
+}
+.asdd {
+    position: relative;
+    display: flex;
+}
+.asdd input:first-of-type {
+    width: 100%;
 }
 
 .upload-button {

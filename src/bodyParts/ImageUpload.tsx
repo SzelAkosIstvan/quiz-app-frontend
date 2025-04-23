@@ -13,7 +13,7 @@ const ImageUpload = () => {
         <>
             <div className={`image-upload ${url && "with-image"}`}>
                 {url ? (
-                    <img className="image-view" src={url} alt=""/>
+                    <img className="image-view" src={url} alt="" onClick={() => setUrl("")}/>
                 ) : (
                     <div className="upload-container">
                         <input type="file" onChange={onChange} className="upload-image" accept=".jpg,.png,.jpeg, .gif" />

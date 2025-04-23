@@ -93,3 +93,21 @@
         -webkit-overflow-scrolling: touch;
     }
 }
+
+.set-as-correct {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    margin-left: auto;
+    width: fit-content;
+    padding: 3px;
+    color: #714568;
+    background-color: #eaeaea;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#correct-answer {
+    color: green;
+}
