@@ -93,3 +93,34 @@
         -webkit-overflow-scrolling: touch;
     }
 }
+
+.set-as-correct {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    margin-left: auto;
+    width: fit-content;
+    padding: 3px;
+    color: #714568;
+    background-color: #eaeaea;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#correct-answer {
+    color: green;
+}
+
+.select-quiz {
+    appearance: none;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px 40px 10px 15px;
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
+    outline: none;
+    background-size: 12px 8px;
+}

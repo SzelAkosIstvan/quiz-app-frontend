@@ -121,6 +121,39 @@ export const setNewUserImage = async (newImage: string): Promise<void> => {
     }
 }
 
+export interface QuizListData {
+    id: number;
+    name: string;
+}
+
+export const getQuizList = async (): Promise<QuizListData[]> => {
+    try {
+        const token = getCookie('token');
+        if (!token) {
+            throw new Error("Nincs érvényes token!");
+        }
+        const id = decodeJwt(token).id;
+        console.log(id);
+        const response = await fetch('http://localhost:8080/getMyQuizzes', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            }
+        });
+        if (response.ok) {
+            console.log("quizek listaja sikeresen megszerezve");
+            const quizzes: QuizListData[] = await response.json();
+            console.log("quizek listája sikeresen megszerezve", quizzes);
+            return quizzes;
+        } else {
+            throw new Error('Hibás ID!');
+        }
+    } catch (error) {
+        throw new Error('Hiba történt a bejelentkezés során.');
+    }
+}
+
 export const handleLogout = () => {
     currentUser = null;
     //localStorage.removeItem('token');

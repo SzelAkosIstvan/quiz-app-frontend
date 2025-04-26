@@ -11,9 +11,10 @@ import QuizTotal from "./QuizTotal";
 type ControlQuizProps = {
     QuizName: string;
     teacherId: string;
+    quizID: number;
 }
 
-const ControlQuiz = ({QuizName, teacherId}: ControlQuizProps) => {
+const ControlQuiz = ({QuizName, teacherId, quizID}: ControlQuizProps) => {
     const [showQuestion, setShowQuestion] = useState(false);
     const [questionORStats, setQuestionORStats] = useState(false);
     const [quizCode, setQuizCode] = useState<string>("");
@@ -31,7 +32,7 @@ const ControlQuiz = ({QuizName, teacherId}: ControlQuizProps) => {
             onConnect: () => {
                 stompClientRef.current = client;
                 console.log('Connected!');
-                client.publish({ destination: `/app/start-quiz`, body: JSON.stringify({ quizId: "1", teacherId }) });
+                client.publish({ destination: `/app/start-quiz`, body: JSON.stringify({ quizId: quizID, teacherId }) });
 
                 client.subscribe(`/topic/teacher/${teacherId}/quiz-code`, (message) => {
                     setQuizCode(message.body);

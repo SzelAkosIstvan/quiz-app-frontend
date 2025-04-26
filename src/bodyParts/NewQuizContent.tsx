@@ -60,7 +60,7 @@ const NewQuizContent: React.FC = () => {
                             question={question.question}
                             possibleAns={question.correctAnswer}
                             setQuestion={(newQuestion) => {setNewQuestion(index, newQuestion)}}
-                            setAnswer={(correctAns) => {setCorrectAns(index, correctAns)}}
+                            setAnswer={(correctAns) => {setPossibleAns(index, 0, correctAns); setCorrectAns(index, correctAns)}}
                         />
                     ) : (
                         <ClosedQuestion
@@ -68,6 +68,8 @@ const NewQuizContent: React.FC = () => {
                             possibleAns={question.possibleAns}
                             setQuestion={(newQuestion) => {setNewQuestion(index, newQuestion)}}
                             setAnswer={(ansIndex, possibleAns) => {setPossibleAns(index, ansIndex, possibleAns)}}
+                            setCorrectAns={(correctAns) => {setCorrectAns(index, correctAns)}}
+                            correctAnsIndex={question.possibleAns.indexOf(question.correctAnswer)}
                         />
                     )}
                 </div>

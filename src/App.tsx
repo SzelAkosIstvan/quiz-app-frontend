@@ -19,7 +19,8 @@ function App() {
     const [isAuthenticated, setIsAuthenticated] = React.useState(false);
     const [isTeacher, setIsTeacher] = React.useState(false);
     const [teacherId, setTeacherId] = useState<string>('');
-    const [quizName, setQuizName] = useState<string>('Internet Technology Lecture #3');
+    const [quizName, setQuizName] = useState<string>('');
+    const [quizId, setQuizId] = useState<number>(1);
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -33,7 +34,6 @@ function App() {
                 //setId(decoded.id);
                 setIsTeacher(decoded.teacherRole);
                     setTeacherId(decoded.id);
-                    setQuizName('Internet Technology Lecture #3');//just to not have eslint warning at this moment
 
                 // console.log(decoded.id);
                 // console.log(decoded.username);
@@ -64,7 +64,7 @@ function App() {
                     element={
                         isAuthenticated ? (
                             isTeacher ? (
-                                <TeacherQuizComponent/>
+                                <TeacherQuizComponent setQuizName={setQuizName} setQuizId={setQuizId}/>
                             ) : (
                                 <StudentMain/>
                                 // <StudentQuizComponent />
@@ -79,7 +79,7 @@ function App() {
                     element={
                         isAuthenticated? (
                             isTeacher? (
-                                <ControlQuiz QuizName={quizName} teacherId={teacherId}/>
+                                <ControlQuiz QuizName={quizName} teacherId={teacherId} quizID={quizId} />
                             ) : (
                                 <StudentQuizComponent />
                             )
