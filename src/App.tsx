@@ -57,7 +57,6 @@ function App() {
     return (
     <div className="App">
             <Routes>
-                <Route path="/total" element={<QuizTotal/>}/>
                 <Route path="/login" element={<LoginPage setIsAuthenticated={setIsAuthenticated} setIsTeacher={setIsTeacher} />}/>
                 <Route
                     path="/"

@@ -4,11 +4,13 @@ import ImageUpload from "./ImageUpload";
 interface OpenQuestionProps {
     question: string;
     possibleAns: string;
+    imageURL: string|null;
     setQuestion: (question: string) => void;
     setAnswer: (answers: string) => void;
+    setImage: (image: string | null) => void;
 }
 
-const OpenQuestion: React.FC<OpenQuestionProps> = ({question, possibleAns = "", setQuestion, setAnswer}) => {
+const OpenQuestion: React.FC<OpenQuestionProps> = ({question, possibleAns = "", imageURL = null, setQuestion, setAnswer, setImage}) => {
 
     return (
         <div className="new-question">
@@ -27,7 +29,7 @@ const OpenQuestion: React.FC<OpenQuestionProps> = ({question, possibleAns = "", 
                     placeholder={`Correct answer`}
                 />
             </div>
-            <ImageUpload />
+            <ImageUpload url={imageURL} setUrl={setImage}/>
         </div>
     );
 };

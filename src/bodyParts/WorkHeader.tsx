@@ -31,7 +31,7 @@ const WorkHeader = ({title, setTitle, save}: HeaderProps) => {
                    }}
                    onClick={changeTitle}
             />
-            <button className="upload-button" onClick={save}>
+            <button type="button" className="upload-button" onClick={save}>
                 <FontAwesomeIcon icon={faCloudArrowUp} className="upload-button-icon" />
             </button>
         </div>

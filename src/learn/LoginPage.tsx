@@ -47,6 +47,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsAuthenticated , setIsTeacher
                         onFocus={() => setIsInputFocused(true)}
                         onBlur={() => setIsInputFocused(false)}
                         autoFocus
+                        maxLength={10}
                     />
                 </form>
             </div>

@@ -6,13 +6,15 @@ import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 interface CloedQuestionProps {
     question: string;
     possibleAns?: string[];
+    imageURL: string|null;
     setQuestion: (question: string) => void;
     setAnswer: (ansIndex: number, answers: string) => void;
     setCorrectAns: (correctAns: string) => void;
     correctAnsIndex: number;
+    setImage: (image: string | null) => void;
 }
 
-const ClosedQuestion: React.FC<CloedQuestionProps> = ({question, possibleAns = ['', '', '', ''], setQuestion, setAnswer, setCorrectAns, correctAnsIndex}: CloedQuestionProps) => {
+const ClosedQuestion: React.FC<CloedQuestionProps> = ({question, possibleAns = ['', '', '', ''], imageURL = null, setQuestion, setAnswer, setCorrectAns, correctAnsIndex, setImage}: CloedQuestionProps) => {
     return (
         <div className="new-question">
             <div className="question-answer-container">
@@ -45,7 +47,7 @@ const ClosedQuestion: React.FC<CloedQuestionProps> = ({question, possibleAns = [
                     ))}
                 </div>
             </div>
-            <ImageUpload />
+            <ImageUpload url={imageURL} setUrl={setImage}/>
         </div>
     );
 };

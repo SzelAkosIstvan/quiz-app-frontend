@@ -8,6 +8,7 @@ interface Question {
     question: string;
     possibleAns: string[];
     correctAnswer: string;
+    questionImage: string|null;
 }
 
 const NewQuizContent: React.FC = () => {
@@ -23,11 +24,11 @@ const NewQuizContent: React.FC = () => {
     }, [questions]);
 
     const addOpenQuestion = () => {
-        setQuestions([...questions, { type: 'open', question: '', possibleAns: [], correctAnswer: '' }]);
+        setQuestions([...questions, { type: 'open', question: '', possibleAns: [], correctAnswer: '', questionImage: null }]);
     };
 
     const addClosedQuestion = () => {
-        setQuestions([...questions, { type: 'closed', question: '', possibleAns: ['', '', '', ''], correctAnswer: '' }]);
+        setQuestions([...questions, { type: 'closed', question: '', possibleAns: ['', '', '', ''], correctAnswer: '', questionImage: null }]);
     };
 
     const setNewQuestion = (index: number, newQuestion: string) => {
@@ -39,6 +40,12 @@ const NewQuizContent: React.FC = () => {
     const setCorrectAns = (index: number, correctAns: string) => {
         const updatedQuestions = [...questions];
         updatedQuestions[index].correctAnswer = correctAns;
+        setQuestions(updatedQuestions);
+    }
+
+    const setQuestionImage = (index: number, questionImg: string|null) => {
+        const updatedQuestions = [...questions];
+        updatedQuestions[index].questionImage = questionImg;
         setQuestions(updatedQuestions);
     }
 
@@ -59,17 +66,21 @@ const NewQuizContent: React.FC = () => {
                         <OpenQuestion
                             question={question.question}
                             possibleAns={question.correctAnswer}
+                            imageURL={question.questionImage}
                             setQuestion={(newQuestion) => {setNewQuestion(index, newQuestion)}}
                             setAnswer={(correctAns) => {setPossibleAns(index, 0, correctAns); setCorrectAns(index, correctAns)}}
+                            setImage={(newImage) => {setQuestionImage(index, newImage)}}
                         />
                     ) : (
                         <ClosedQuestion
                             question={question.question}
                             possibleAns={question.possibleAns}
+                            imageURL={question.questionImage}
                             setQuestion={(newQuestion) => {setNewQuestion(index, newQuestion)}}
                             setAnswer={(ansIndex, possibleAns) => {setPossibleAns(index, ansIndex, possibleAns)}}
                             setCorrectAns={(correctAns) => {setCorrectAns(index, correctAns)}}
                             correctAnsIndex={question.possibleAns.indexOf(question.correctAnswer)}
+                            setImage={(newImage) => {setQuestionImage(index, newImage)}}
                         />
                     )}
                 </div>
